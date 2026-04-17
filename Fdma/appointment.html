@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book an Appointment - Nordrux</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+
+    <style>
+        body { 
+            background-color: #f8f9fa; 
+            font-family: 'Segoe UI', 
+            Tahoma, Geneva, Verdana, sans-serif;
+         }
+      
+    
+      .container-box { 
+        max-width: 950px; margin: 40px auto; 
+            background: #f1f8f1; padding: 35px; 
+            border-radius: 12px; box-shadow: 
+            0 4px 15px rgba(0,0,0,0.05); 
+    }
+        
+        #appointmentUI { display: none; background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 4px; }
+        .appointment-title { color: #606c38; font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; display: none; }
+
+        .time-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .date-label { color: #606c38; font-size: 1.2rem; font-weight: 500; }
+
+        .nav-btn {
+            background: #f0f2f5; border: none; width: 35px; height: 35px; border-radius: 50%;
+            display: inline-flex; align-items: center; justify-content: center; color: #727cf5; cursor: pointer;
+        }
+
+        .time-container { max-height: 380px; overflow-y: auto; display: flex; flex-wrap: wrap; gap: 10px; }
+        .time-slot {
+            flex: 0 0 calc(50% - 5px); border: 1px solid #4a90e2; color: #4a90e2;
+            padding: 10px; text-align: center; border-radius: 5px; cursor: pointer; background: #fff;
+        }
+        .time-slot.active { background: #4a69bd; color: #fff; border-color: #4a69bd; }
+
+        #offMessage {
+            display: none; color: #d9534f; font-weight: bold; padding: 40px 20px; 
+            text-align: center; border: 1px dashed #d9534f; border-radius: 8px; background: #fff5f5;
+        }
+
+        .selected-box {
+            display: none; background: #4e73df; color: white; padding: 15px 25px;
+            border-radius: 8px; margin-top: 20px; align-items: center; justify-content: space-between;
+        }
+        .cancel-btn { background: white; border: none; padding: 8px 15px; border-radius: 5px; font-weight: 600; cursor: pointer; }
+        .timezone-text { font-size: 0.85rem; color: #666; margin-top: 15px; }
+        label { font-weight: 500; color: #4b5a41; margin-bottom: 6px; }
+        .required::after { content: " *"; color: #dc3545; }
+        .form-select, .form-control { padding: 10px; border-radius: 6px; }
+        .d-none { display: none; }
+.submit-btn {
+    background-color: #1ebc61; /* The exact green from your image */
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 1.5rem; /* Larger text like the screenshot */
+    font-weight: 500;
+    border-radius: 10px; /* Softer rounded corners */
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #17a654; /* Slightly darker on hover */
+}
+        .time-slot-btn {
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+    padding: 10px 5px;
+    text-align: center;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.time-slot-btn:hover {
+    background-color: #f0f7ff;
+}
+
+.time-slot-btn.active {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.appointment-box {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+}
+    </style>
+</head>
+<body>
+
+<!-- Top Contact Bar -->
+
+<div class="top-bar">
+
+<div class="container">
+
+<div class="row">
+
+<div class="col-md-8">
+
+<span class="me-4">
+<i class="fa fa-phone"></i> +1 (587) 832-1208
+</span>
+
+<span class="me-4">
+<i class="fa fa-envelope"></i> info@____.com
+</span>
+
+<span>
+<i class="fa fa-location-dot"></i> Calgary, Alberta, Canada
+</span>
+
+</div>
+
+<div class="col-md-4 text-end">
+
+<i class="fa-brands fa-linkedin me-3"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- Navbar -->
+
+<div class="container mt-3">
+
+<nav class="navbar navbar-expand-lg main-navbar shadow">
+
+<a class="navbar-brand" href="index.html">
+
+<img src="./images/fmda-logo.png" height="50">
+
+</a>
+
+<button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+<span class="navbar-toggler-icon"></span>
+</button>
+
+<div class="collapse navbar-collapse" id="menu">
+
+<ul class="navbar-nav ms-auto align-items-center">
+
+<li class="nav-item">
+<a class="nav-link text-success fw-bold" href="#home">Home</a>
+</li>
+
+
+<li class="nav-item">
+<a class="nav-link" href="#services">Services</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="our-team.html">Our Team</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="#testimonials">Testimonials</a>
+</li>
+
+<li class="nav-item">
+<a class="nav-link" href="#contact-form">Contact Us</a>
+</li>
+
+<li class="nav-item ms-3">
+<a class="btn loginn-btn">NDX Login</a>
+</li>
+
+</ul>
+
+</div>
+
+</nav>
+
+</div>
+
+    <div class="container-box">
+    <div class="mb-4">
+        <label class="fw-bold mb-2">Location for Test: *</label>
+        <select id="locationSelect" class="form-select w-50">
+            <option value="">Select Location</option>
+            <option value="calgary">Calgary – Pioneer Trucking</option>
+            <option value="edmonton">Edmonton – G&G Trucking Solutions</option>
+            <option value="ottawa">Ottawa – Crossroad Truck & Career Academy</option>
+        </select>
+        <div id="appointmentUI">
+        <div id="title-calgary" class="appointment-title">APPOINTMENT DETAILS CALGARY, AB - Pioneer Trucking (Unit 1010 - 4231 109 Ave. NE Calgary)</div>
+        <div id="title-edmonton" class="appointment-title">APPOINTMENT DETAILS Edmonton – G&G Trucking Solutions (8810 51 Ave NW)</div>
+        <div id="title-ottawa" class="appointment-title">APPOINTMENT DETAILS Ottawa – Crossroad Truck & Career Academy</div>
+
+        <div class="row">
+            <div class="col-md-5"><div id="inlineCalendar"></div></div>
+            <div class="col-md-7">
+                <div id="offMessage">
+                    <i class="fa-solid fa-calendar-times fa-3x mb-3"></i><br>
+                    <span id="offMessageText">LABS ARE OFF TODAY</span>
+                </div>
+
+                <div id="timeSection">
+                    <div class="time-header-row">
+                        <span class="date-label" id="displayDay">Select Date</span>
+                        <div>
+                            <button class="nav-btn" onclick="changeDate(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                            <button class="nav-btn" onclick="changeDate(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div id="timeSlots" class="time-container"></div>
+                </div>
+                
+                <div class="timezone-text">
+                    <i class="fa-regular fa-clock"></i> America/Edmonton (<span id="americaTime">--:-- --</span>) <i class="fa-solid fa-lock"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="selectedBox" class="selected-box">
+        <div class="d-flex align-items-center gap-3">
+            <i class="fa-regular fa-calendar-check fa-2x"></i>
+            <div>
+                <div class="fw-bold">Selected Time</div>
+                <div id="finalDateTimeText"></div>
+            </div>
+        </div>
+        <button class="cancel-btn" onclick="resetSelection()">Cancel Selection</button>
+    </div>
+</div>
+<div class="toggle-box">
+                <label class="form-label required">US DOT / NON-DOT</label>
+                <div class="d-flex gap-5 mt-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="dotToggle" id="usDotRadio" value="us-dot" checked onclick="updateFormView()">
+                        <label class="form-check-label" for="usDotRadio">US DOT</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="dotToggle" id="nonDotRadio" value="non-dot" onclick="updateFormView()">
+                        <label class="form-check-label" for="nonDotRadio">Non-DOT</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="usDotContainer">
+                <div class="mb-4">
+                    <label class="form-label required">Testing to be Performed:</label>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="usTest" id="us1" checked>
+                        <label class="form-check-label" for="us1">Drug Test Only (US DOT Urine)</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="usTest" id="us2">
+                        <label class="form-check-label" for="us2">Drug and Alcohol Test (Drug-US DOT Urine/Alcohol- Breath or Saliva)</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="usTest" id="us3">
+                        <label class="form-check-label" for="us3"> Alcohol Test only (Breath or Saliva)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="nonDotContainer" class="d-none">
+                <div class="mb-4">
+                    <label class="form-label required">Drug Test to be Performed:</label>
+                    <select class="form-select">
+                        <option selected disabled>Please Select</option>
+                        <option>Express Drug Test (Urine)</option>
+                        <option>Lab Based Drug Test (Urine)</option>
+                        <option>Oral Fluid (Saliva) Test</option>
+                    </select>
+                </div>
+            </div>
+
+           <div class="mb-4">
+    <label class="form-label required">Reason for Test:</label>
+    <select class="form-select" id="reasonSelect" onchange="togglePreEmploymentFields()">
+        <option selected disabled>Please Select</option>
+        <option value="Pre-employment">Pre-employment</option>
+        <option value="Random">Random</option>
+        <option value="Post-Accident">Post-Accident</option>
+    </select>
+</div>
+
+<div class="section-title">Driver Information</div>
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <label class="form-label required">Driver First Name</label>
+        <input type="text" class="form-control">
+    </div>
+    <div class="col-md-6">
+        <label class="form-label required">Driver Last Name</label>
+        <input type="text" class="form-control">
+    </div>
+</div>
+
+<div id="preEmploymentFields" class="d-none">
+    <div class="mb-3">
+        <label class="form-label">Drivers License Number (Not Required):</label>
+        <input type="text" class="form-control">
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Drivers License Issuing State/Province:</label>
+        <input type="text" class="form-control">
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Date of Birth:</label>
+        <input type="date" class="form-control">
+        <div class="small text-muted mt-1">Date</div>
+    </div>
+</div>
+
+            <div class="section-title">Company Contact Information</div>
+            <div class="mb-3">
+                <label class="form-label required">Company Name</label>
+                <input type="text" class="form-control">
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label required">Your First Name</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label required">Your Last Name</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label required">Your Email</label>
+                <input type="email" class="form-control" placeholder="name@company.com">
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-8">
+                    <label class="form-label required">Phone Number</label>
+                    <input type="tel" class="form-control" placeholder="(000) 000-0000">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Ext.</label>
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+
+             <div class="mb-4">
+                <label class="form-label required">Are you a DER (Designated Employer Representative)?</label>
+                <div class="d-flex gap-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="derToggle" id="derYes" value="yes" checked onclick="toggleDER()">
+                        <label class="form-check-label" for="derYes">Yes</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="derToggle" id="derNo" value="no" onclick="toggleDER()">
+                        <label class="form-check-label" for="derNo">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="derFields" class="d-none">
+                <div class="row g-3 mb-3">
+                    <label class="form-label">Enter DER Name:</label>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control">
+                        <div class="small-label">First Name</div>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control">
+                        <div class="small-label">Last Name</div>
+                    </div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                        <label class="form-label">DER Contact No.:</label>
+                        <input type="tel" class="form-control" placeholder="(000) 000-0000">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Ext. #</label>
+                        <input type="text" class="form-control" placeholder="e.g., 23">
+                    </div>
+                </div>
+                <hr>
+            </div>
+
+           <div class="toggle-box">
+    <label class="form-label required">Would you like to email the appointment details to the driver or another person?</label>
+    <div class="d-flex gap-4 mt-2">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="emailToggle" id="emailYes" value="yes" onclick="toggleEmail()">
+            <label class="form-check-label" for="emailYes">Yes</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="emailToggle" id="emailNo" value="no" checked onclick="toggleEmail()">
+            <label class="form-check-label" for="emailNo">No</label>
+        </div>
+    </div>
+</div>
+
+<div id="emailFields" class="d-none">
+    <div class="mb-3">
+        <label class="form-label">Enter Driver Email:</label>
+        <input type="email" class="form-control" placeholder="example@example.com">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Other Person Email:</label>
+        <input type="email" class="form-control" placeholder="example@example.com">
+    </div>
+    
+    <div class="mb-3">
+        <label class="form-label">Add Additional Email</label>
+        <div class="d-flex gap-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="addEmail" id="addEmailYes" onclick="toggleAdditionalEmail()"> 
+                <label class="form-check-label" for="addEmailYes">Yes</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="addEmail" id="addEmailNo" checked onclick="toggleAdditionalEmail()"> 
+                <label class="form-check-label" for="addEmailNo">No</label>
+            </div>
+        </div>
+    </div>
+
+    <div id="additionalEmailFields" class="d-none mb-3">
+        <label class="form-label">Enter Additional Email:</label>
+        <input type="email" class="form-control" placeholder="extra-email@example.com">
+    </div>
+</div> 
+<div class="mb-4">
+    <label class="form-label">Notes:</label>
+    <textarea class="form-control" rows="4"></textarea>
+</div>
+
+<div class="mb-4">
+    <label class="form-label required">Please verify that you are human</label>
+    <div class="p-3 bg-white border rounded d-flex align-items-center" style="width: 300px;">
+        <input type="checkbox" class="me-3" style="width: 20px; height: 20px;">
+        <span>I'm not a robot</span>
+        <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" class="ms-auto" width="30">
+    </div>
+</div>
+
+<div class="d-grid mt-4">
+    <button type="submit" class="submit-btn">Submit</button>
+</div>
+</form>
+            
+    </div>
+
+    
+
+<script>
+    function showDateTime() {
+    const locationSelect = document.getElementById('locationSelect');
+    const dateTimeSection = document.getElementById('dateTimeSection');
+    const locationDetails = document.getElementById('locationDetails');
+
+    if (locationSelect.value !== "") {
+        // Show both the date/time picker and the location address details
+        dateTimeSection.classList.remove('d-none');
+        locationDetails.classList.remove('d-none');
+    }
+}
+    function toggleDER() {
+        const fields = document.getElementById('derFields');
+        const isNo = document.getElementById('derNo').checked;
+        fields.classList.toggle('d-none', !isNo);
+    }
+
+    function toggleEmail() {
+        const fields = document.getElementById('emailFields');
+        const isYes = document.getElementById('emailYes').checked;
+        fields.classList.toggle('d-none', !isYes);
+    }
+    
+    function togglePreEmploymentFields() {
+    const reasonSelect = document.getElementById('reasonSelect');
+    const preEmpFields = document.getElementById('preEmploymentFields');
+    
+    if (reasonSelect.value === "Pre-employment") {
+        preEmpFields.classList.remove('d-none');
+    } else {
+        preEmpFields.classList.add('d-none');
+    }
+}
+</script>
+
+    </div>
+</div>
+
+<script>
+    function updateFormView() {
+        const usContainer = document.getElementById('usDotContainer');
+        const nonDotContainer = document.getElementById('nonDotContainer');
+        const isUsDot = document.getElementById('usDotRadio').checked;
+
+        if (isUsDot) {
+            usContainer.classList.remove('d-none');
+            nonDotContainer.classList.add('d-none');
+        } else {
+            usContainer.classList.add('d-none');
+            nonDotContainer.classList.remove('d-none');
+        }
+    }
+    function toggleAdditionalEmail() {
+    const additionalFields = document.getElementById('additionalEmailFields');
+    const isYesChecked = document.getElementById('addEmailYes').checked;
+
+    if (isYesChecked) {
+        additionalFields.classList.remove('d-none');
+    } else {
+        additionalFields.classList.add('d-none');
+    }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+// --- CONFIGURATION PER LOCATION ---
+const locationConfig = {
+    calgary: {
+        workingDays: [1, 2, 3, 4, 5, 6], // Mon to Sat (0 is Sun)
+        slots: ["9:00 AM","9:30 AM", "10:00 AM","10:30 AM", "11:00 AM","11:30 AM", "12:00 PM","12:30 PM", "1:00 PM","1:30 PM", "2:00 PM","2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM"]
+    },
+    edmonton: {
+        workingDays: [1, 2, 3, 4, 5], // Mon to Fri
+        slots: ["8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM","10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM"]
+    },
+    ottawa: {
+        workingDays: [1, 2, 3, 4, 5], // Mon to Fri
+        slots: ["10:00 AM", "10:30 AM", "11:00 AM","11:30 AM", "12:00 PM","12:30 PM", "1:00 PM","1:30 PM", "2:00 PM","2:30 PM", "3:00 PM"]
+    }
+};
+
+const locationSelect = document.getElementById("locationSelect");
+const appointmentUI = document.getElementById("appointmentUI");
+const timeSlotsContainer = document.getElementById("timeSlots");
+const timeSection = document.getElementById("timeSection");
+const offMessage = document.getElementById("offMessage");
+const offMessageText = document.getElementById("offMessageText");
+const selectedBox = document.getElementById("selectedBox");
+const displayDay = document.getElementById("displayDay");
+const finalDateTimeText = document.getElementById("finalDateTimeText");
+
+let selectedDateStr = "";
+let selectedTimeStr = "";
+let currentLoc = "";
+
+const fp = flatpickr("#inlineCalendar", {
+    inline: true,
+    minDate: "today",
+    onChange: (selectedDates) => processDate(selectedDates[0])
+});
+
+function changeDate(days) {
+    let current = fp.selectedDates[0] || new Date();
+    let nextDate = new Date(current);
+    nextDate.setDate(current.getDate() + days);
+    if (nextDate < new Date().setHours(0,0,0,0)) return;
+    fp.setDate(nextDate, true);
+}
+
+function processDate(date) {
+    if (!date || !currentLoc) return;
+    
+    const dayOfWeek = date.getDay();
+    const config = locationConfig[currentLoc];
+
+    if (!config.workingDays.includes(dayOfWeek)) {
+        timeSection.style.display = "none";
+        offMessage.style.display = "block";
+        offMessageText.innerText = dayOfWeek === 0 ? "LABS ARE OFF ON SUNDAY" : "LABS ARE OFF ON SATURDAY";
+        selectedBox.style.display = "none";
+    } else {
+        offMessage.style.display = "none";
+        timeSection.style.display = "block";
+        selectedDateStr = fp.formatDate(date, "l, F j, Y");
+        displayDay.innerText = fp.formatDate(date, "l, F j");
+        generateSlots(config.slots);
+    }
+}
+
+function generateSlots(slots) {
+    timeSlotsContainer.innerHTML = "";
+    slots.forEach(t => {
+        let div = document.createElement("div");
+        div.className = "time-slot";
+        div.innerText = t;
+        div.onclick = function() {
+            document.querySelectorAll(".time-slot").forEach(s => s.classList.remove("active"));
+            div.classList.add("active");
+            selectedTimeStr = t;
+            selectedBox.style.display = "flex";
+            finalDateTimeText.innerText = `${selectedTimeStr} ${selectedDateStr}`;
+        };
+        timeSlotsContainer.appendChild(div);
+    });
+}
+
+locationSelect.addEventListener("change", function() {
+    currentLoc = this.value;
+    document.querySelectorAll('.appointment-title').forEach(el => el.style.display = 'none');
+    
+    if(currentLoc !== "") {
+        appointmentUI.style.display = "block";
+        document.getElementById('title-' + currentLoc).style.display = 'block';
+        const checkDate = fp.selectedDates.length > 0 ? fp.selectedDates[0] : new Date();
+        processDate(checkDate);
+    } else {
+        appointmentUI.style.display = "none";
+        selectedBox.style.display = "none";
+    }
+});
+
+function resetSelection() {
+    selectedBox.style.display = "none";
+    document.querySelectorAll(".time-slot").forEach(s => s.classList.remove("active"));
+}
+
+function updateClock() {
+    const options = { timeZone: 'America/Edmonton', hour: '2-digit', minute: '2-digit', hour12: true };
+    document.getElementById("americaTime").innerText = new Intl.DateTimeFormat('en-US', options).format(new Date());
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<footer class="footer-section">
+
+<div class="container">
+
+<div class="row align-items-center">
+
+<!-- Left Card -->
+
+<div class="col-lg-4">
+
+<div class="footer-card">
+
+<img src="./images/fmda-logo.png" class="footer-logo">
+
+<p>
+Federal Motor Drug Association supports the transportation industry through reliable drug and alcohol testing, compliance programs, and safety services.
+
+Our goal is to help organizations maintain safe workplaces, responsible drivers, and full regulatory compliance while protecting both businesses and communities.
+</p>
+
+<div class="social">
+
+<a href="#"><i class="fab fa-linkedin-in"></i></a>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- Right Content -->
+
+<div class="col-lg-6 offset-lg-1">
+
+<h4 class="footer-title">Contact Us</h4>
+
+<p class="footer-text">
+Need assistance? Contact us today
+</p>
+
+<ul class="footer-contact">
+
+<li>
+<i class="fa fa-location-dot"></i>
+Unit 3236, Cityscape Landing Plaza, <br>  4310, 104 Ave NE, Calgary, Alberta T3J 1W5
+</li>
+
+<li>
+<i class="fa fa-phone"></i>
++91 987654321
+</li>
+
+<li>
+<i class="fa fa-phone"></i>
++91 987654321
+</li>
+
+<li>
+<i class="fa fa-envelope"></i>
+infofederal.com
+</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="text-center copyright">
+
+Copyright 2023. All Rights Reserved.
+
+</div>
+
+</div>
+
+</footer>
+
+
+</body>
+</html>
