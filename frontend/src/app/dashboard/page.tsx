@@ -1,7 +1,7 @@
 'use client';
-
 import { useAuth } from '../../hooks/useAuth';
 import { DashboardLayout } from '../../components/DashboardLayout';
+import {AppointmentBooking} from './from';
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -18,12 +18,16 @@ export default function DashboardPage() {
     switch (user.role) {
       case 'admin':
         return (
-          <div>
+           <div className="p-4">
             <h2 className="text-2xl font-bold mb-4">Admin Dashboard</h2>
-            <p>Welcome, Admin! You have full access to manage users, vendors, drivers, and reports.</p>
-            {/* Add admin-specific widgets/cards */}
+            <p className="mb-6">Welcome, Admin! Create a new appointment below.</p>
+            
+            {/* 2. Form ko yahan place karein */}
+            <AppointmentBooking />
+            
           </div>
         );
+      
       case 'vendor':
         return (
           <div>
